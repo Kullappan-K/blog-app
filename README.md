@@ -20,10 +20,6 @@ POST /addarticle/create
 
 7. Create the JWT token
 
-I have created the static username and password(Refer the data.sql file)
-Username     password
-------------------------
-AAA          AAA
-BBB          BBB
+I have created the static username and password(Refer the data.sql file).
 
 POST /login
