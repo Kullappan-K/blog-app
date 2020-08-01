@@ -16,7 +16,7 @@ GET /blog/1/articles
 POST /addblog/create
 
 6.Create the new article(provide the insert JSON of the article)
-POST /addarticle.create
+POST /addarticle/create
 
 7. Create the JWT token
 
