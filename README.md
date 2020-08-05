@@ -23,3 +23,15 @@ POST /addarticle/create
 I have created the static username and password(Refer the data.sql file).
 
 POST /login
+
+8. Read the all comments for particular blog of the application
+GET /blog/1/comments
+
+9.Read the particular comments of the application
+GET /blog/1/comments/1
+
+5. Create the new Comments(provide the insert JSON of the comments)
+POST /addcomments/create
+
+6.Create the new Reply(provide the insert JSON of the reply)
+POST /addreply/create
