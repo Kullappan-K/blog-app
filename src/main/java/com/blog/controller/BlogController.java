@@ -20,14 +20,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.exception.BlogExceptionHandler;
+import com.blog.exception.CommentsExceptionHandler;
 import com.blog.exception.DatabaseExceptionHandler;
 import com.blog.key.BlogKey;
 import com.blog.key.BlogTokenResponse;
 import com.blog.key.SecurityData;
 import com.blog.model.Article;
 import com.blog.model.Blog;
+import com.blog.model.Comments;
+import com.blog.model.Replies;
 import com.blog.service.impl.ArticleServiceImpl;
 import com.blog.service.impl.BlogServiceImpl;
+import com.blog.service.impl.CommentsServiceImpl;
 import com.blog.service.impl.SecurityServiceImpl;
 import com.blog.util.SecurityUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -48,6 +52,9 @@ public class BlogController {
 	private SecurityServiceImpl securityService;
 	
 	@Autowired
+	private CommentsServiceImpl commentsServiceImpl;
+	
+	@Autowired
 	private SecurityUtil securityUtil;
 	
 	@GetMapping("/allblogs")
@@ -63,7 +70,7 @@ public class BlogController {
 	public ResponseEntity<?> getAllArticle() throws JsonProcessingException, BlogExceptionHandler {
 		List<Article> articleList = articleServiceImpl.getAllArticle();
 		if(CollectionUtils.isEmpty(articleList)) {
-			throw new BlogExceptionHandler("Blog not found", HttpStatus.BAD_REQUEST.value());
+			throw new BlogExceptionHandler("Article not found", HttpStatus.BAD_REQUEST.value());
 		}
 		return ResponseEntity.ok(articleList);
 	}
@@ -76,7 +83,43 @@ public class BlogController {
 		}
 		return ResponseEntity.ok(blogData);
 	}
-
+	
+	@GetMapping("/blog/{id}/comments")
+	public ResponseEntity<?> getAllComments(@PathVariable String id) throws JsonProcessingException, CommentsExceptionHandler{
+		List<Object> commentList = commentsServiceImpl.getAllComments(Integer.parseInt(id));
+		if(CollectionUtils.isEmpty(commentList)) {
+			throw new CommentsExceptionHandler("Comments not found", HttpStatus.NOT_FOUND.value());
+		}
+		return ResponseEntity.ok(commentList);
+	}
+	
+	@GetMapping("/blog/{id}/comments/{comment_id}")
+	public ResponseEntity<?> getComments(@PathVariable String id, @PathVariable String comment_id) throws JsonProcessingException, CommentsExceptionHandler{
+		List<Object> commentList = commentsServiceImpl.getComments(Integer.parseInt(id), Integer.parseInt(comment_id));
+		if(CollectionUtils.isEmpty(commentList)) {
+			throw new CommentsExceptionHandler("Comments not found", HttpStatus.NOT_FOUND.value());
+		}
+		return ResponseEntity.ok(commentList);
+	}
+	@PostMapping("/addcomments/create")
+	public ResponseEntity<?> createComments(@RequestBody Comments comments) throws JsonProcessingException, DatabaseExceptionHandler{
+		try {
+			commentsServiceImpl.createComments(comments);
+			}catch(Exception ex) {
+				throw new DatabaseExceptionHandler("CHECK INSERT COMMENTS JSON", HttpStatus.CONFLICT.value());
+			}
+			return ResponseEntity.ok("Comments added successfully");
+	}
+	
+	@PostMapping("/addreply/create")
+	public ResponseEntity<?> createReply(@RequestBody Replies replies) throws JsonProcessingException, DatabaseExceptionHandler{
+		try {
+			commentsServiceImpl.createReply(replies);
+			}catch(Exception ex) {
+				throw new DatabaseExceptionHandler("CHECK INSERT REPLY JSON", HttpStatus.CONFLICT.value());
+			}
+			return ResponseEntity.ok("reply added successfully");
+	}
 	
 	@PostMapping("/addblog/create")
 	public ResponseEntity<?> createBlog(@RequestBody Blog blog) throws DatabaseExceptionHandler {

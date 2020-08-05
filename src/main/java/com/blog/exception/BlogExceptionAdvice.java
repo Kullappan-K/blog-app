@@ -32,4 +32,12 @@ public class BlogExceptionAdvice extends ResponseEntityExceptionHandler{
 		blogError.setErrorCode(ex.getStatusCode());
 		return new ResponseEntity<BlogError>(blogError, HttpStatus.CONFLICT);
 	}
+	
+	@ExceptionHandler(CommentsExceptionHandler.class)
+	public ResponseEntity<BlogError>emptyComment(CommentsExceptionHandler ex){
+		BlogError blogError = new BlogError();
+		blogError.setErrorMessage(ex.getMessage());
+		blogError.setErrorCode(ex.getStatusCode());
+		return new ResponseEntity<BlogError>(blogError, HttpStatus.NOT_FOUND);
+	}
 }
