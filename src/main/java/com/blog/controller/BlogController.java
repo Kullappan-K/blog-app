@@ -108,7 +108,7 @@ public class BlogController {
 			}catch(Exception ex) {
 				throw new DatabaseExceptionHandler("CHECK INSERT COMMENTS JSON", HttpStatus.CONFLICT.value());
 			}
-			return ResponseEntity.ok("Comments added successfully");
+			return ResponseEntity.ok("Comments added successfully ");
 	}
 	
 	@PostMapping("/addreply/create")
