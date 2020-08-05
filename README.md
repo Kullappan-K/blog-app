@@ -30,8 +30,8 @@ GET /blog/1/comments
 9.Read the particular comments of the application
 GET /blog/1/comments/1
 
-5. Create the new Comments(provide the insert JSON of the comments)
+10. Create the new Comments(provide the insert JSON of the comments)
 POST /addcomments/create
 
-6.Create the new Reply(provide the insert JSON of the reply)
+11. Create the new Reply(provide the insert JSON of the reply)
 POST /addreply/create
